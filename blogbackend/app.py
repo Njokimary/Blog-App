@@ -84,6 +84,21 @@ def get_all_posts():
     return jsonify({'posts': output})
 
 
+# Get a single post by ID
+@app.route('/posts/<int:post_id>', methods=['GET'])
+def get_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    post_data = {}
+    post_data['id'] = post.id
+    post_data['title'] = post.title
+    post_data['content'] = post.content
+    post_data['date_posted'] = post.date_posted
+    post_data['author'] = post.author.username
+    post_data['categories'] = [category.name for category in post.categories]
+    return jsonify({'post': post_data})
+
+
+
 
 if __name__ == '__main__':
     # Create the database tables
