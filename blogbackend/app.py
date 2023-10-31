@@ -97,7 +97,16 @@ def get_post(post_id):
     post_data['categories'] = [category.name for category in post.categories]
     return jsonify({'post': post_data})
 
-
+# Update a post by ID
+@app.route('/posts/<int:post_id>', methods=['PUT'])
+def update_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    data = request.get_json()
+    post.title = data['title']
+    post.content = data['content']
+    post.date_posted = datetime.utcnow()
+    db.session.commit()
+    return jsonify({'message': 'Post updated successfully!'})
 
 
 if __name__ == '__main__':
