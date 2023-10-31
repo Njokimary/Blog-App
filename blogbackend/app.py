@@ -108,6 +108,14 @@ def update_post(post_id):
     db.session.commit()
     return jsonify({'message': 'Post updated successfully!'})
 
+# Delete a post by ID
+@app.route('/posts/<int:post_id>', methods=['DELETE'])
+def delete_post(post_id):
+    post = Post.query.get_or_404(post_id)
+    db.session.delete(post)
+    db.session.commit()
+    return jsonify({'message': 'Post deleted successfully!'})
+
 
 if __name__ == '__main__':
     # Create the database tables
