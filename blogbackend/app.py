@@ -116,6 +116,27 @@ def delete_post(post_id):
     db.session.commit()
     return jsonify({'message': 'Post deleted successfully!'})
 
+# Create a new category
+@app.route('/categories', methods=['POST'])
+def create_category():
+    data = request.get_json()
+    new_category = Category(name=data['name'])
+    db.session.add(new_category)
+    db.session.commit()
+    return jsonify({'message': 'Category created successfully!'})
+
+# Get all categories
+@app.route('/categories', methods=['GET'])
+def get_all_categories():
+    categories = Category.query.all()
+    output = []
+    for category in categories:
+        category_data = {}
+        category_data['id'] = category.id
+        category_data['name'] = category.name
+        category_data['posts'] = [post.title for post in category.posts]
+        output.append(category_data)
+    return jsonify({'categories': output})
 
 if __name__ == '__main__':
     # Create the database tables
